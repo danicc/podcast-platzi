@@ -1,7 +1,6 @@
 # Podcast App - Learning Next.js
 
-This is an application to learn the basics of Next.js framework. This project have been done following the 
-Next.js Platzi course.
+This is an application to learn the basics of Next.js framework. This project have been done following the Next.js Platzi course [Live Deom](https://podcast-platzi-qksmzllkra.now.sh/).
 
 ## Requirements
 
