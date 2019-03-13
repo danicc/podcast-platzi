@@ -1,0 +1,18 @@
+{
+  "short_name": "Podcasts",
+  "name": "Platzi Podcasts PWA",
+  "icons": [
+    {
+      "src": "/static/podcast-brand.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#8756ca",
+  "background_color": "#1F1E1F",
+  "scope": "/",
+  "related_applications": [],
+  "prefer_related_applications": false
+}

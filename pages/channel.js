@@ -1,14 +1,14 @@
-import 'isomorphic-fetch'
-import ChannelGrid from '../components/ChannelGrid';
-import Error from './_error';
-import PodcastListWithClick from '../components/PodcastListWithClick';
-import PodcastPlayer from '../components/PodcastPlayer';
-import Layout from '../components/Layout';
+import "isomorphic-fetch";
+import ChannelGrid from "../components/ChannelGrid";
+import Error from "./_error";
+import PodcastListWithClick from "../components/PodcastListWithClick";
+import PodcastPlayer from "../components/PodcastPlayer";
+import Layout from "../components/Layout";
 
 export default class Channel extends React.Component {
   state = {
-    openPodcast: ''
-  }
+    openPodcast: ""
+  };
 
   static async getInitialProps({ query, res }) {
     const channelId = query.id;
@@ -22,21 +22,26 @@ export default class Channel extends React.Component {
 
       if (reqChannel.status >= 404) {
         res.statusCode = reqChannel.status;
-        return { channel: null, audioClips: null, series: null, statusCode: reqChannel.status };
+        return {
+          channel: null,
+          audioClips: null,
+          series: null,
+          statusCode: reqChannel.status
+        };
       }
 
-      let dataChannel = await reqChannel.json()
-      let channel = dataChannel.body.channel
+      let dataChannel = await reqChannel.json();
+      let channel = dataChannel.body.channel;
 
-      let dataAudios = await reqAudios.json()
-      let audioClips = dataAudios.body.audio_clips
+      let dataAudios = await reqAudios.json();
+      let audioClips = dataAudios.body.audio_clips;
 
-      let dataSeries = await reqSeries.json()
-      let series = dataSeries.body.channels
+      let dataSeries = await reqSeries.json();
+      let series = dataSeries.body.channels;
 
-      return { channel, audioClips, series, statusCode: 200 }
+      return { channel, audioClips, series, statusCode: 200 };
     } catch (err) {
-      res.statusCode = 503;
+      if (res) res.statusCode = 503;
       return { channel: null, audioClips: null, series: null, statusCode: 503 };
     }
   }
@@ -46,42 +51,48 @@ export default class Channel extends React.Component {
     this.setState({
       openPodcast: podcast
     });
-  }
+  };
 
   closePodcastModal = () => {
     this.setState({
-      openPodcast: ''
-    })
-  }
+      openPodcast: ""
+    });
+  };
 
   render() {
     const { channel, audioClips, series, statusCode } = this.props;
     const { openPodcast } = this.state;
 
     if (statusCode !== 200) {
-      return (<Error statusCode={statusCode} />)
+      return <Error statusCode={statusCode} />;
     }
     return (
       <Layout title={channel.title}>
+        {openPodcast && (
+          <PodcastPlayer clip={openPodcast} onClose={this.closePodcastModal} />
+        )}
 
-        { 
-          openPodcast && 
-          <PodcastPlayer clip={openPodcast} onClose={this.closePodcastModal} /> 
-        }
-
-        <div className="banner" style={{ backgroundImage: `url(${channel.urls.banner_image.original})` }} />
+        <div
+          className="banner"
+          style={{
+            backgroundImage: `url(${channel.urls.banner_image.original})`
+          }}
+        />
 
         <h1>{channel.title}</h1>
 
-        {series.length > 0 &&
+        {series.length > 0 && (
           <div>
             <h2>Series</h2>
             <ChannelGrid channels={series} />
           </div>
-        }
+        )}
 
         <h2>Ultimos Podcasts</h2>
-        <PodcastListWithClick podcasts={audioClips} onClickPodcast={this.openPodcast} />
+        <PodcastListWithClick
+          podcasts={audioClips}
+          onClickPodcast={this.openPodcast}
+        />
         <style jsx>{`
           .banner {
             width: 100%;
@@ -102,6 +113,6 @@ export default class Channel extends React.Component {
           }
         `}</style>
       </Layout>
-    )
+    );
   }
 }
